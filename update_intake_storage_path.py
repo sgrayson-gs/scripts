@@ -31,7 +31,7 @@ def update_intake_storage_path(path, api_key, session):
         .decode("utf-8")
     )
 
-    updated_path = path.replace(".", "/")
+    updated_path = path.split(".")[-1]+"/inbound"
 
     print(hashed_api_key, updated_path)
 
