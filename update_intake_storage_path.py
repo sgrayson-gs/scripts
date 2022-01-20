@@ -39,7 +39,9 @@ def update_intake_storage_path(path, api_key, session):
         session.query(AgencyConfiguration).\
             filter(AgencyConfiguration.hashed_api_key == hashed_api_key).\
             update({"intake_storage_path": updated_path})
+        session.commit()
     except Exception as e:
+        session.rollback()
         print(f"Error updating the agency_configuration for hashed_key {hashed_api_key}: {e}")
 
     return True
@@ -54,17 +56,12 @@ def run():
     if secret_response["ResponseMetadata"]["HTTPStatusCode"] == 200:
         secret_json = json.loads(secret_response["SecretString"])
         with session_scope() as session:
-            try:
-                # Loop through each of the keys and update the path in postgres
-                for path, api_key in secret_json.items():
-                    update_intake_storage_path(path, api_key, session)
+            # Loop through each of the keys and update the path in postgres
+            for path, api_key in secret_json.items():
+                update_intake_storage_path(path, api_key, session)
 
-                # Commit the updates to postgres
-                session.commit()
+            print(f"-- Script complete. Records updated {len(secret_json)} --")
 
-                print(f"-- Script complete. Records updated {len(secret_json)} --")
-            finally:
-                session.expunge_all()
     else:
         print("Error fetching aws secret")
 
