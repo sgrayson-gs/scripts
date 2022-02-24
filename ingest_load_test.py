@@ -155,7 +155,7 @@ def run():
     if STAGE == "prod":
         answer = input(
             "Your selected environment is prod, are you sure you want to do this? (y or n): ").lower()
-        if answer == "n":
+        if answer != "y":
             return
 
     if STAGE not in ["prod", "dev"]:
