@@ -13,9 +13,9 @@ https://groundspeed.atlassian.net/wiki/spaces/ENG/pages/2356805653/Ingest+Orches
 
 Arguments:
 - uploads_path: path to CSV containing uploads to send to ingest 1.0
-- env: environment for reingestion. DEFAULT = DEV
 
 Requirements:
+- Set stage when running script ex: STAGE=dev
 - A file containing uploads exported as csv
 - You must be on VPN
 - pip install argparse
